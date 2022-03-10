@@ -17,3 +17,9 @@ Connects OpenBCI Cyton+Daisy Biosensing Board and plots C4 electrode on screen:
 - C4 filtered using same filters than in OpenBCI.py code
 - Fast Fourier Transformation in order to detect main frequencies on signal
 - Deviation calculation in order to distinguish between hand/arm movement and relaxation states
+
+### `OpenDroneTakeoffLand.py`
+Code that controls a drone using C4 electrode and FFT deviation calculation. When deviation is more than 300000, the dron takes off and, after 2 seconds, lands. Then, the program exits.
+
+### `OpenDroneUpDown.py`
+A dron takes off when clicking on button. The code controls a drone using C4 electrode and FFT deviation calculation. When deviation is more than 300000, the dron rises up. When user relaxes, deviation goes down, so does the dron.
