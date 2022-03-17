@@ -27,6 +27,9 @@ class Graph():
         self.window_size = 4
         self.num_points = self.window_size * self.sampling_rate
 
+        ## Limit for Up/Down drone movement
+        self.deviation_limit = 108194
+
         self.me.takeoff()
 
         self.app = QtGui.QApplication([])
@@ -82,11 +85,19 @@ class Graph():
         curve = p.plot()
         self.curves.append(curve)
 
+        #Plot 4 - Message
+        p = self.win.addPlot(3,0)
+        p.setTitle("TAKE OFF")
+        self.plots.append(p)
+        curve = p.plot()
+        self.curves.append(curve)
+
     def update(self):
         # Plot Data Vars
         plotCharC4Raw = 0
         plotCharC4Filtered = 1
         plotCharC4FFT = 2
+        plotCharText = 3
 
         # Channel Vars
         channelC4 = 11
@@ -121,19 +132,21 @@ class Graph():
         deviation = statistics.pstdev(abs(YY))
 
         # Dron movement dependng on deviation
-        speed = 10
+        speed = 50
         print(deviation)
-        if deviation > 30000:
+        if deviation > self.deviation_limit:
             self.me.send_rc_control(0, 0, speed, 0)
+            self.plots[plotCharText].setTitle("GOING UP")
         else:
             self.me.send_rc_control(0, 0, -speed, 0)
+            self.plots[plotCharText].setTitle("GOING DOWN")
 
         self.app.processEvents()
 
 
 def stream_window(board, me):
     Graph(board, me)
-    # Land drone when application finished
+    # Land drone when application finishes
     me.land()
 
 def main():
